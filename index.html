@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linage</title>
+<meta name="description" content="Документация серверных плагинов Linage.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#030308">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23030308'/%3E%3Cpath d='M40 14a20 20 0 1 0 10 28A16 16 0 0 1 40 14z' fill='%23ddd9bf'/%3E%3C/svg%3E">
+
+<!--
+          .
+        .  *      .          Если ты читаешь это, значит, ты смотришь туда, куда смотрят немногие.
+     *      _.._        .
+        .  / .  `.   *      Ничего не сломано. Просто не всё нужно показывать сразу.
+          |  `   |
+     .     \  . ,'    .
+        *    `--'
+                            Ниже спрятано сообщение. Оно запечатано так, как запечатывают всё в этом мире:
+                            не слишком надёжно и ровно настолько, чтобы его читали только любопытные.
+
+  0JrQvdC40LPQsCDRgdCw0LTQvtCy0L7QtNCwINC/0YDRj9GH0LXRgtGB0Y8g0LIg0LTQtdGA0LXQstC10L3RgdC60LjRhSDRgdGD0L3QtNGD0LrQsNGFINGH0LDRidC1LCDRh9C10Lwg0LPQtNC1LdC70LjQsdC+LiDQkNCy0YLQvtGA0L7QsiDRgyDQvdC10ZEg0LTQstCw0LTRhtCw0YLRjCDQvtC00LjQvSwg0Lgg0L3QuCDQvtC00LjQvSDQvdC1INC/0LjRgdCw0Lsg0LTQstCw0LbQtNGLINC+0LTQuNC90LDQutC+0LLQvi4g0J/RgNC40YHRj9C00Ywg0YDRj9C00L7QvCDRgSDRgNCw0YHRgtC10L3QuNC10LwsINC60L7Qs9C00LAg0LrQvdC40LPQsCDQsiDRgdGD0LzQutC1Lg==
+
+  Подсказка: base64. Остальное, как обычно, узнаешь, играя.
+-->
+
+<style>
+:root{
+  --bg:#030308;
+  --ink:#b9b6c6;
+  --muted:#746f88;
+  --accent:#c8c4aa;
+  --neon:#ece8cc;
+  --neon-glow:rgba(236,232,204,.5);
+  --violet:#7a5cff;
+  --line:rgba(221,217,191,.12);
+  --glow:rgba(221,217,191,.22);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+::selection{background:rgba(122,92,255,.4);color:#fff}
+body{
+  margin:0;min-height:100vh;color:var(--ink);overflow-x:hidden;
+  font:16px/1.75 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:
+    radial-gradient(900px 620px at 88% -6%,rgba(86,54,190,.16),transparent 62%),
+    radial-gradient(800px 600px at -6% 104%,rgba(64,36,140,.15),transparent 62%),
+    var(--bg);
+  background-attachment:fixed;
+}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 38%,transparent 38%,rgba(1,1,4,.82) 100%)}
+.sr{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+
+/* ---------- космос: всё на CSS и SVG, без скриптов ---------- */
+.sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.clouds{position:absolute;inset:-8%;animation:drift 140s ease-in-out infinite alternate;will-change:transform}
+.clouds svg{width:100%;height:100%;display:block}
+.clouds.warm{opacity:.24}
+.clouds.violet{opacity:.2;animation-duration:180s;animation-direction:alternate-reverse}
+@keyframes drift{from{transform:translate3d(-2%,0,0)}to{transform:translate3d(3%,-1.5%,0)}}
+.planet{
+  position:absolute;left:-190px;bottom:-250px;width:560px;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 72% 22%,#110c26 0%,#070512 46%,#020205 100%);
+  box-shadow:inset 14px 10px 40px rgba(140,110,255,.12),inset -40px -30px 90px rgba(0,0,0,.92),
+             0 0 80px -16px rgba(110,76,205,.22);
+}
+.layer{position:absolute;left:0;top:0;border-radius:50%;background:transparent}
+.l1{width:1px;height:1px;box-shadow:45.24vw 55.98vh 0 0 rgba(221,217,191,0.29),45.18vw 85.50vh 0 0 rgba(176,150,255,0.15),47.58vw 61.40vh 0 0 rgba(221,217,191,0.15),30.34vw 9.07vh 0 0 rgba(221,217,191,0.27),59.54vw 39.62vh 0 0 rgba(176,150,255,0.20),65.01vw 62.31vh 0 0 rgba(221,217,191,0.27),5.96vw 19.02vh 0 0 rgba(221,217,191,0.16),77.81vw 32.63vh 0 0 rgba(221,217,191,0.23),51.91vw 64.03vh 0 0 rgba(221,217,191,0.21),45.73vw 27.82vh 0 0 rgba(221,217,191,0.30),70.78vw 31.53vh 0 0 rgba(221,217,191,0.16),2.98vw 56.31vh 0 0 rgba(221,217,191,0.14),84.66vw 38.65vh 0 0 rgba(221,217,191,0.29),21.35vw 92.70vh 0 0 rgba(221,217,191,0.13),98.04vw 39.74vh 0 0 rgba(221,217,191,0.13),77.85vw 26.98vh 0 0 rgba(221,217,191,0.14),1.51vw 41.01vh 0 0 rgba(221,217,191,0.29),24.64vw 10.10vh 0 0 rgba(221,217,191,0.13),17.77vw 55.93vh 0 0 rgba(221,217,191,0.20),98.53vw 76.95vh 0 0 rgba(221,217,191,0.20),11.65vw 42.08vh 0 0 rgba(221,217,191,0.16),86.43vw 97.49vh 0 0 rgba(221,217,191,0.23),21.07vw 39.43vh 0 0 rgba(176,150,255,0.27),10.03vw 98.93vh 0 0 rgba(221,217,191,0.16),0.96vw 61.03vh 0 0 rgba(221,217,191,0.27),7.34vw 9.01vh 0 0 rgba(221,217,191,0.22),1.55vw 36.87vh 0 0 rgba(221,217,191,0.23),95.91vw 48.37vh 0 0 rgba(221,217,191,0.22),18.28vw 15.41vh 0 0 rgba(176,150,255,0.28),24.95vw 18.98vh 0 0 rgba(176,150,255,0.25),19.66vw 95.01vh 0 0 rgba(176,150,255,0.28),7.85vw 4.74vh 0 0 rgba(176,150,255,0.14),96.27vw 23.84vh 0 0 rgba(221,217,191,0.25),42.08vw 90.48vh 0 0 rgba(176,150,255,0.21),17.54vw 72.04vh 0 0 rgba(221,217,191,0.13),47.93vw 65.35vh 0 0 rgba(221,217,191,0.23),28.02vw 91.74vh 0 0 rgba(221,217,191,0.16),6.92vw 41.14vh 0 0 rgba(221,217,191,0.16),17.63vw 36.88vh 0 0 rgba(221,217,191,0.22),9.22vw 13.84vh 0 0 rgba(221,217,191,0.20),65.69vw 69.12vh 0 0 rgba(221,217,191,0.23),58.99vw 92.36vh 0 0 rgba(221,217,191,0.21),70.10vw 96.28vh 0 0 rgba(221,217,191,0.12),48.22vw 73.05vh 0 0 rgba(221,217,191,0.18),7.53vw 54.61vh 0 0 rgba(221,217,191,0.25),79.33vw 91.50vh 0 0 rgba(221,217,191,0.18),90.08vw 87.11vh 0 0 rgba(221,217,191,0.20),86.35vw 57.28vh 0 0 rgba(221,217,191,0.23),37.92vw 1.24vh 0 0 rgba(221,217,191,0.13),63.94vw 99.33vh 0 0 rgba(221,217,191,0.28),38.84vw 73.50vh 0 0 rgba(221,217,191,0.22),46.26vw 54.13vh 0 0 rgba(176,150,255,0.21),2.98vw 60.13vh 0 0 rgba(221,217,191,0.21),95.74vw 11.29vh 0 0 rgba(221,217,191,0.26),25.58vw 1.13vh 0 0 rgba(176,150,255,0.17),20.26vw 16.96vh 0 0 rgba(221,217,191,0.28),49.83vw 24.15vh 0 0 rgba(221,217,191,0.19),19.85vw 43.09vh 0 0 rgba(221,217,191,0.27),88.03vw 38.44vh 0 0 rgba(221,217,191,0.22),20.99vw 13.46vh 0 0 rgba(221,217,191,0.18),71.12vw 95.00vh 0 0 rgba(221,217,191,0.17),11.28vw 47.14vh 0 0 rgba(221,217,191,0.29),38.25vw 52.00vh 0 0 rgba(176,150,255,0.24),45.25vw 7.47vh 0 0 rgba(176,150,255,0.13),4.15vw 70.86vh 0 0 rgba(221,217,191,0.22),64.93vw 56.40vh 0 0 rgba(221,217,191,0.24),45.48vw 2.47vh 0 0 rgba(221,217,191,0.27),77.93vw 79.68vh 0 0 rgba(221,217,191,0.30),44.65vw 63.00vh 0 0 rgba(221,217,191,0.24),95.85vw 68.45vh 0 0 rgba(221,217,191,0.16),25.60vw 71.42vh 0 0 rgba(176,150,255,0.26),71.42vw 17.91vh 0 0 rgba(221,217,191,0.17),53.97vw 94.68vh 0 0 rgba(221,217,191,0.21),39.35vw 79.19vh 0 0 rgba(221,217,191,0.28),41.05vw 89.26vh 0 0 rgba(221,217,191,0.19),45.35vw 62.55vh 0 0 rgba(221,217,191,0.28),55.00vw 65.27vh 0 0 rgba(221,217,191,0.21),46.37vw 65.13vh 0 0 rgba(221,217,191,0.16),21.33vw 90.00vh 0 0 rgba(221,217,191,0.30),53.70vw 79.08vh 0 0 rgba(221,217,191,0.18),34.85vw 8.28vh 0 0 rgba(176,150,255,0.20),42.14vw 27.53vh 0 0 rgba(221,217,191,0.29),80.91vw 6.41vh 0 0 rgba(221,217,191,0.26),53.31vw 68.66vh 0 0 rgba(221,217,191,0.28),14.87vw 51.65vh 0 0 rgba(221,217,191,0.25),94.57vw 49.26vh 0 0 rgba(221,217,191,0.29),75.78vw 43.94vh 0 0 rgba(176,150,255,0.22),63.89vw 52.28vh 0 0 rgba(176,150,255,0.27),25.65vw 67.13vh 0 0 rgba(176,150,255,0.29),20.82vw 85.08vh 0 0 rgba(176,150,255,0.29),27.30vw 49.76vh 0 0 rgba(221,217,191,0.19),50.32vw 60.52vh 0 0 rgba(221,217,191,0.12),51.60vw 40.06vh 0 0 rgba(176,150,255,0.26),12.19vw 9.32vh 0 0 rgba(176,150,255,0.15),45.89vw 92.08vh 0 0 rgba(221,217,191,0.26),26.92vw 47.32vh 0 0 rgba(221,217,191,0.14),90.09vw 93.57vh 0 0 rgba(176,150,255,0.29),31.72vw 19.15vh 0 0 rgba(221,217,191,0.23),12.95vw 77.93vh 0 0 rgba(221,217,191,0.12),15.55vw 1.18vh 0 0 rgba(221,217,191,0.17),24.45vw 49.88vh 0 0 rgba(176,150,255,0.21),12.28vw 51.05vh 0 0 rgba(221,217,191,0.17),70.14vw 87.87vh 0 0 rgba(221,217,191,0.12),82.52vw 61.58vh 0 0 rgba(176,150,255,0.22),63.85vw 52.96vh 0 0 rgba(176,150,255,0.27),58.66vw 13.65vh 0 0 rgba(221,217,191,0.28),90.27vw 31.59vh 0 0 rgba(221,217,191,0.18),21.81vw 99.84vh 0 0 rgba(221,217,191,0.28),88.90vw 13.25vh 0 0 rgba(221,217,191,0.14),9.70vw 83.22vh 0 0 rgba(221,217,191,0.20),20.06vw 62.80vh 0 0 rgba(221,217,191,0.26),20.09vw 68.24vh 0 0 rgba(221,217,191,0.28),11.54vw 50.57vh 0 0 rgba(176,150,255,0.26),99.86vw 83.29vh 0 0 rgba(221,217,191,0.26),10.62vw 3.74vh 0 0 rgba(176,150,255,0.22),90.51vw 48.13vh 0 0 rgba(221,217,191,0.15),20.39vw 84.02vh 0 0 rgba(221,217,191,0.30),57.98vw 13.45vh 0 0 rgba(221,217,191,0.24),76.47vw 32.68vh 0 0 rgba(176,150,255,0.20),35.46vw 21.01vh 0 0 rgba(221,217,191,0.19),84.43vw 18.13vh 0 0 rgba(221,217,191,0.20),40.53vw 19.51vh 0 0 rgba(176,150,255,0.15),79.23vw 32.37vh 0 0 rgba(221,217,191,0.14),56.97vw 19.09vh 0 0 rgba(221,217,191,0.23),80.48vw 25.83vh 0 0 rgba(221,217,191,0.28),81.46vw 40.56vh 0 0 rgba(176,150,255,0.28),69.48vw 76.73vh 0 0 rgba(221,217,191,0.26),20.68vw 18.48vh 0 0 rgba(221,217,191,0.26),46.88vw 1.06vh 0 0 rgba(176,150,255,0.18),4.96vw 27.30vh 0 0 rgba(221,217,191,0.29),33.78vw 65.98vh 0 0 rgba(176,150,255,0.22),7.68vw 51.47vh 0 0 rgba(221,217,191,0.21),70.13vw 76.17vh 0 0 rgba(221,217,191,0.30),11.48vw 10.81vh 0 0 rgba(221,217,191,0.16),40.16vw 5.05vh 0 0 rgba(221,217,191,0.16),1.08vw 25.86vh 0 0 rgba(221,217,191,0.17),55.01vw 50.78vh 0 0 rgba(176,150,255,0.29),84.64vw 9.96vh 0 0 rgba(221,217,191,0.20),54.94vw 66.84vh 0 0 rgba(221,217,191,0.29),93.02vw 15.99vh 0 0 rgba(221,217,191,0.20),85.57vw 54.20vh 0 0 rgba(221,217,191,0.23),94.53vw 42.07vh 0 0 rgba(176,150,255,0.21),31.24vw 53.04vh 0 0 rgba(221,217,191,0.21),56.06vw 28.35vh 0 0 rgba(221,217,191,0.25),2.69vw 77.25vh 0 0 rgba(221,217,191,0.23),40.88vw 68.43vh 0 0 rgba(221,217,191,0.13),74.84vw 5.02vh 0 0 rgba(221,217,191,0.30),7.35vw 90.56vh 0 0 rgba(221,217,191,0.20),25.09vw 75.55vh 0 0 rgba(221,217,191,0.13),93.73vw 72.27vh 0 0 rgba(221,217,191,0.20),60.36vw 11.51vh 0 0 rgba(221,217,191,0.23),11.80vw 86.11vh 0 0 rgba(221,217,191,0.18),12.43vw 44.29vh 0 0 rgba(221,217,191,0.24),60.11vw 63.96vh 0 0 rgba(221,217,191,0.24),77.80vw 53.08vh 0 0 rgba(221,217,191,0.30),73.43vw 23.84vh 0 0 rgba(221,217,191,0.14),78.43vw 62.50vh 0 0 rgba(221,217,191,0.18),60.98vw 72.51vh 0 0 rgba(221,217,191,0.25),63.31vw 75.33vh 0 0 rgba(221,217,191,0.15),50.21vw 65.29vh 0 0 rgba(221,217,191,0.16),62.84vw 0.95vh 0 0 rgba(221,217,191,0.17),62.33vw 10.25vh 0 0 rgba(221,217,191,0.22),75.58vw 91.29vh 0 0 rgba(221,217,191,0.15),63.11vw 37.32vh 0 0 rgba(221,217,191,0.21),33.83vw 49.44vh 0 0 rgba(221,217,191,0.14),80.23vw 44.73vh 0 0 rgba(221,217,191,0.27),44.43vw 74.73vh 0 0 rgba(221,217,191,0.19),36.89vw 65.37vh 0 0 rgba(221,217,191,0.30),29.09vw 75.90vh 0 0 rgba(221,217,191,0.27),42.77vw 36.93vh 0 0 rgba(221,217,191,0.14),7.85vw 8.30vh 0 0 rgba(221,217,191,0.22),81.53vw 46.35vh 0 0 rgba(221,217,191,0.27),7.61vw 21.33vh 0 0 rgba(221,217,191,0.24),69.51vw 49.48vh 0 0 rgba(221,217,191,0.26),28.29vw 14.29vh 0 0 rgba(221,217,191,0.18),36.64vw 11.74vh 0 0 rgba(176,150,255,0.25),59.48vw 90.24vh 0 0 rgba(221,217,191,0.24),43.80vw 80.30vh 0 0 rgba(221,217,191,0.17),22.12vw 96.78vh 0 0 rgba(176,150,255,0.25),24.83vw 36.17vh 0 0 rgba(221,217,191,0.19),67.70vw 58.48vh 0 0 rgba(176,150,255,0.26),36.82vw 39.02vh 0 0 rgba(176,150,255,0.15),56.28vw 17.66vh 0 0 rgba(221,217,191,0.26),81.19vw 22.12vh 0 0 rgba(221,217,191,0.13),56.75vw 96.64vh 0 0 rgba(221,217,191,0.24),6.41vw 54.68vh 0 0 rgba(221,217,191,0.26),33.45vw 27.36vh 0 0 rgba(221,217,191,0.14),8.47vw 63.41vh 0 0 rgba(221,217,191,0.15),24.55vw 22.04vh 0 0 rgba(176,150,255,0.26),33.82vw 45.91vh 0 0 rgba(221,217,191,0.18)}
+.l2{width:2px;height:2px;box-shadow:67.24vw 49.37vh 0 0 rgba(221,217,191,0.35),70.81vw 91.50vh 0 0 rgba(221,217,191,0.32),85.35vw 80.59vh 0 0 rgba(221,217,191,0.42),95.78vw 64.03vh 0 0 rgba(221,217,191,0.35),80.23vw 42.16vh 0 0 rgba(221,217,191,0.32),24.57vw 16.23vh 0 0 rgba(221,217,191,0.37),32.09vw 38.93vh 0 0 rgba(221,217,191,0.35),96.98vw 5.92vh 0 0 rgba(221,217,191,0.29),30.35vw 15.55vh 0 0 rgba(221,217,191,0.44),75.31vw 1.72vh 0 0 rgba(221,217,191,0.34),31.26vw 19.76vh 0 0 rgba(176,150,255,0.31),23.54vw 71.72vh 0 0 rgba(221,217,191,0.36),44.20vw 89.45vh 0 0 rgba(221,217,191,0.32),62.68vw 94.20vh 0 0 rgba(221,217,191,0.35),48.48vw 40.26vh 0 0 rgba(176,150,255,0.45),77.17vw 9.24vh 0 0 rgba(221,217,191,0.43),4.97vw 94.75vh 0 0 rgba(221,217,191,0.41),97.60vw 79.47vh 0 0 rgba(221,217,191,0.41),65.76vw 23.76vh 0 0 rgba(221,217,191,0.22),90.52vw 45.00vh 0 0 rgba(221,217,191,0.28),60.61vw 15.73vh 0 0 rgba(221,217,191,0.26),14.47vw 90.81vh 0 0 rgba(221,217,191,0.41),63.70vw 99.31vh 0 0 rgba(176,150,255,0.28),5.29vw 57.19vh 0 0 rgba(221,217,191,0.26),82.14vw 84.62vh 0 0 rgba(221,217,191,0.42),35.17vw 61.49vh 0 0 rgba(221,217,191,0.35),69.37vw 8.29vh 0 0 rgba(176,150,255,0.40),85.73vw 30.36vh 0 0 rgba(221,217,191,0.41),19.31vw 68.22vh 0 0 rgba(221,217,191,0.41),20.84vw 54.34vh 0 0 rgba(221,217,191,0.35),94.66vw 96.39vh 0 0 rgba(221,217,191,0.30),7.60vw 30.57vh 0 0 rgba(221,217,191,0.33),35.97vw 68.71vh 0 0 rgba(221,217,191,0.25),67.59vw 74.66vh 0 0 rgba(221,217,191,0.41),65.39vw 1.23vh 0 0 rgba(221,217,191,0.31),23.75vw 56.41vh 0 0 rgba(221,217,191,0.33),85.61vw 84.45vh 0 0 rgba(176,150,255,0.39),15.21vw 62.78vh 0 0 rgba(221,217,191,0.44),95.41vw 75.49vh 0 0 rgba(221,217,191,0.35),25.64vw 19.99vh 0 0 rgba(221,217,191,0.40),30.97vw 27.38vh 0 0 rgba(221,217,191,0.33),44.69vw 38.24vh 0 0 rgba(176,150,255,0.24),9.44vw 67.77vh 0 0 rgba(221,217,191,0.39),19.32vw 3.65vh 0 0 rgba(221,217,191,0.33),10.04vw 3.24vh 0 0 rgba(221,217,191,0.46),40.68vw 7.27vh 0 0 rgba(221,217,191,0.44),92.69vw 13.91vh 0 0 rgba(221,217,191,0.27),82.11vw 38.59vh 0 0 rgba(221,217,191,0.30),62.30vw 72.69vh 0 0 rgba(221,217,191,0.37),98.20vw 78.97vh 0 0 rgba(176,150,255,0.38),52.99vw 26.07vh 0 0 rgba(221,217,191,0.27),65.07vw 10.63vh 0 0 rgba(176,150,255,0.31);animation:tw 8s ease-in-out infinite}
+.l3{width:2px;height:2px;box-shadow:33.28vw 29.35vh 2px 0px rgba(190,196,255,0.30),15.83vw 76.65vh 2px 0px rgba(176,150,255,0.50),23.39vw 61.20vh 2px 0px rgba(176,150,255,0.40),71.34vw 98.68vh 2px 0px rgba(190,196,255,0.40),70.68vw 93.59vh 2px 0px rgba(221,217,191,0.42),62.71vw 19.79vh 2px 0px rgba(221,217,191,0.30),47.79vw 41.75vh 2px 0px rgba(221,217,191,0.36),92.91vw 36.12vh 2px 0px rgba(221,217,191,0.39),45.23vw 72.98vh 2px 0px rgba(176,150,255,0.34),54.34vw 56.07vh 2px 0px rgba(221,217,191,0.41),16.85vw 74.57vh 2px 0px rgba(221,217,191,0.50),60.15vw 12.27vh 2px 0px rgba(221,217,191,0.48),68.51vw 36.36vh 2px 0px rgba(221,217,191,0.46),83.08vw 18.56vh 2px 0px rgba(221,217,191,0.41),45.44vw 40.34vh 2px 0px rgba(190,196,255,0.47),13.83vw 75.61vh 2px 0px rgba(221,217,191,0.48),61.52vw 64.03vh 2px 0px rgba(221,217,191,0.46),19.95vw 46.80vh 2px 0px rgba(221,217,191,0.31),11.83vw 40.57vh 2px 0px rgba(221,217,191,0.36),26.37vw 56.80vh 2px 0px rgba(190,196,255,0.36),78.40vw 72.16vh 2px 0px rgba(221,217,191,0.47),95.93vw 60.01vh 2px 0px rgba(221,217,191,0.39),89.67vw 91.31vh 2px 0px rgba(221,217,191,0.42),75.17vw 48.58vh 2px 0px rgba(190,196,255,0.52),40.90vw 43.40vh 2px 0px rgba(176,150,255,0.42),33.04vw 52.07vh 2px 0px rgba(221,217,191,0.38);animation:tw 11s ease-in-out infinite -4s}
+.l4{width:3px;height:3px;box-shadow:32.07vw 5.47vh 6px 2px rgba(221,217,191,0.58),73.20vw 59.75vh 6px 2px rgba(221,217,191,0.59),88.26vw 87.71vh 6px 2px rgba(221,217,191,0.46),24.23vw 87.31vh 6px 2px rgba(221,217,191,0.64),69.49vw 52.62vh 6px 2px rgba(221,217,191,0.46),65.68vw 94.02vh 6px 2px rgba(190,196,255,0.62),96.65vw 66.57vh 6px 2px rgba(221,217,191,0.62),56.40vw 16.41vh 6px 2px rgba(221,217,191,0.56);animation:tw 14s ease-in-out infinite -7s}
+@keyframes tw{0%,100%{opacity:.35}50%{opacity:.85}}
+.moon{position:absolute;right:8vw;top:10vh;width:clamp(56px,6.4vw,84px);color:var(--accent);opacity:.6;
+  filter:drop-shadow(0 0 10px rgba(221,217,191,.2)) drop-shadow(0 0 36px rgba(122,92,255,.22))}
+.moon svg{display:block;width:100%;height:auto}
+.shoot{position:absolute;left:-12%;top:16%;width:150px;height:1px;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(221,217,191,.6));
+  box-shadow:0 0 6px rgba(221,217,191,.3);animation:shoot 30s linear infinite 8s}
+@keyframes shoot{0%{opacity:0;transform:translate(0,0) rotate(17deg)}1%{opacity:.85}3.5%{opacity:0;transform:translate(72vw,24vh) rotate(17deg)}100%{opacity:0}}
+.const{position:absolute;left:10vw;top:12vh;width:min(26vw,320px);opacity:.4;filter:drop-shadow(0 0 4px rgba(221,217,191,.25))}
+@media (prefers-reduced-motion:reduce){.l2,.l3,.l4,.clouds,.shoot{animation:none}}
+
+/* ---------- страница ---------- */
+main{position:relative;z-index:1;width:min(1040px,100% - 40px);margin:0 auto;padding:min(10vh,92px) 0 70px}
+header{margin-bottom:46px}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px;color:var(--accent);
+  letter-spacing:.42em;text-transform:uppercase;font-size:.76rem;color:var(--neon);text-shadow:0 0 10px var(--neon-glow)}
+.brand i{display:block;width:36px;height:1px;background:linear-gradient(90deg,var(--accent),transparent);box-shadow:0 0 6px var(--glow)}
+h1{margin:0 0 12px;font:600 clamp(2.1rem,5.6vw,3.4rem)/1.08 Georgia,"Times New Roman",serif;letter-spacing:-.015em;
+  color:var(--neon);text-shadow:0 0 16px rgba(236,232,204,.45),0 0 44px rgba(236,232,204,.2),0 0 90px rgba(122,92,255,.45)}
+.lead{margin:0;max-width:58ch;color:var(--muted)}
+
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:44px;align-items:start}
+.nav{position:sticky;top:56px;display:flex;flex-direction:column;border-left:1px solid var(--line)}
+.nav label{
+  position:relative;display:flex;gap:16px;align-items:baseline;cursor:pointer;padding:15px 20px;
+  color:var(--muted);font-size:.96rem;letter-spacing:.03em;transition:color .25s,background .25s;
+}
+.nav label::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:2px;background:transparent;transition:background .25s,box-shadow .25s}
+.nav label:hover{color:var(--ink)}
+.nav .n{font:.72rem ui-monospace,SFMono-Regular,Consolas,monospace;color:rgba(221,217,191,.42);letter-spacing:.1em}
+
+.panels{
+  position:relative;border:1px solid var(--line);border-radius:2px;
+  background:linear-gradient(180deg,rgba(10,8,22,.7),rgba(4,3,10,.78));
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 0 0 1px rgba(122,92,255,.08),0 0 60px -30px rgba(122,92,255,.4),0 40px 90px -40px #000;
+}
+.panels::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent) 30%,var(--violet) 70%,transparent);
+  box-shadow:0 0 10px var(--glow);opacity:.55}
+.panel{display:none;padding:clamp(24px,4vw,42px);animation:fade .5s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.panel{animation:none}}
+.panel h2{margin:0 0 4px;font:600 clamp(1.45rem,3.2vw,2rem)/1.2 Georgia,"Times New Roman",serif;color:var(--neon);
+  text-shadow:0 0 12px rgba(236,232,204,.4),0 0 38px rgba(122,92,255,.4)}
+.panel .tag{margin:0 0 22px;color:var(--muted);font-size:.78rem;letter-spacing:.16em}
+.panel p{margin:0 0 1.1em;max-width:64ch}
+.panel p:last-child{margin-bottom:0}
+footer{margin-top:40px;color:var(--muted);font-size:.84rem;display:flex;gap:12px;align-items:center}
+footer::before{content:"";width:28px;height:1px;background:var(--line)}
+
+@media (max-width:780px){
+  .layout{grid-template-columns:1fr;gap:18px}
+  .nav{position:static;flex-direction:row;overflow-x:auto;border-left:0;border-bottom:1px solid var(--line);scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav label{padding:13px 18px;white-space:nowrap}
+  .nav label::before{left:0;right:0;top:auto;bottom:-1px;width:auto;height:2px}
+}
+
+#t-elytra:checked ~ .nav label[for="t-elytra"]{color:var(--neon);text-shadow:0 0 10px var(--neon-glow);background:linear-gradient(90deg,rgba(122,92,255,.14),transparent)}
+#t-elytra:checked ~ .nav label[for="t-elytra"]::before{background:var(--neon);box-shadow:0 0 12px var(--neon-glow),0 0 26px rgba(122,92,255,.5)}
+#t-elytra:checked ~ .nav label[for="t-elytra"] .n{color:var(--neon)}
+#t-elytra:checked ~ .panels #p-elytra{display:block}
+#t-elytra:focus-visible ~ .nav label[for="t-elytra"]{outline:1px solid var(--accent);outline-offset:-3px}
+#t-seasons:checked ~ .nav label[for="t-seasons"]{color:var(--neon);text-shadow:0 0 10px var(--neon-glow);background:linear-gradient(90deg,rgba(122,92,255,.14),transparent)}
+#t-seasons:checked ~ .nav label[for="t-seasons"]::before{background:var(--neon);box-shadow:0 0 12px var(--neon-glow),0 0 26px rgba(122,92,255,.5)}
+#t-seasons:checked ~ .nav label[for="t-seasons"] .n{color:var(--neon)}
+#t-seasons:checked ~ .panels #p-seasons{display:block}
+#t-seasons:focus-visible ~ .nav label[for="t-seasons"]{outline:1px solid var(--accent);outline-offset:-3px}
+#t-plants:checked ~ .nav label[for="t-plants"]{color:var(--neon);text-shadow:0 0 10px var(--neon-glow);background:linear-gradient(90deg,rgba(122,92,255,.14),transparent)}
+#t-plants:checked ~ .nav label[for="t-plants"]::before{background:var(--neon);box-shadow:0 0 12px var(--neon-glow),0 0 26px rgba(122,92,255,.5)}
+#t-plants:checked ~ .nav label[for="t-plants"] .n{color:var(--neon)}
+#t-plants:checked ~ .panels #p-plants{display:block}
+#t-plants:focus-visible ~ .nav label[for="t-plants"]{outline:1px solid var(--accent);outline-offset:-3px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <!-- облака: фрактальный шум, окрашенный в пыльную дымку; рисуется браузером, без скриптов -->
+  <filter id="cloudWarm" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.0034 0.0078" numOctaves="5" seed="4" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 .66  0 0 0 0 .58  0 0 0 0 .58  2.9 0 0 0 -1.25"/>
+    <feGaussianBlur stdDeviation="7"/>
+  </filter>
+  <filter id="cloudViolet" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.0026 0.0062" numOctaves="4" seed="19" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 .38  0 0 0 0 .27  0 0 0 0 .72  3.1 0 0 0 -1.4"/>
+    <feGaussianBlur stdDeviation="8"/>
+  </filter>
+</svg>
+
+<div class="sky" aria-hidden="true">
+  <div class="clouds violet"><svg preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#cloudViolet)"/></svg></div>
+  <div class="clouds warm"><svg preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#cloudWarm)"/></svg></div>
+  <div class="planet"></div>
+  <div class="layer l1"></div><div class="layer l2"></div><div class="layer l3"></div><div class="layer l4"></div>
+  <svg class="const" viewBox="0 0 320 200" fill="none" stroke="rgba(221,217,191,.35)" stroke-width="1">
+    <polyline points="10,150 70,96 130,120 200,52 262,84 306,28"/>
+    <g fill="rgba(221,217,191,.85)" stroke="none">
+      <circle cx="10" cy="150" r="2"/><circle cx="70" cy="96" r="2.4"/><circle cx="130" cy="120" r="1.8"/>
+      <circle cx="200" cy="52" r="2.6"/><circle cx="262" cy="84" r="1.8"/><circle cx="306" cy="28" r="2.2"/>
+    </g>
+  </svg>
+  <div class="moon"><svg viewBox="0 0 64 64"><path d="M40 6a26 26 0 1 0 16 46A21 21 0 0 1 40 6z" fill="currentColor"/></svg></div>
+  <div class="shoot"></div>
+</div>
+
+<main>
+  <header>
+    <div class="brand"><i></i>Linage</div>
+    <h1>Серверные плагины</h1>
+    <p class="lead">Описание того, как устроены собственные плагины сервера: что они делают и что видит игрок. Часть деталей не описана намеренно.</p>
+  </header>
+
+  <div class="layout">
+    <input type="radio" name="plugin" id="t-elytra" class="sr" checked>
+    <input type="radio" name="plugin" id="t-seasons" class="sr">
+    <input type="radio" name="plugin" id="t-plants" class="sr">
+    <nav class="nav" aria-label="Плагины">
+      <label for="t-elytra"><span class="n">01</span>Элитры</label>
+      <label for="t-seasons"><span class="n">02</span>Сезоны</label>
+      <label for="t-plants"><span class="n">03</span>Растения</label>
+    </nav>
+    <div class="panels">
+      <section class="panel" id="p-elytra">
+        <h2>Элитры и непогода</h2>
+        <p class="tag">LinageElytraRain · 1.2</p>
+        <p>Плагин добавляет износ элитр в непогоду. Если игрок летит на элитрах под дождём или снегопадом на открытом воздухе, прочность тратится быстрее обычного. Сначала несколько секунд износа нет, потом он начинается и постепенно нарастает, пока игрок остаётся в осадках.</p>
+        <p>Под крышей, в пещере и вне осадков износ не действует. Снег изнашивает мягче дождя. Дождь учитывается и в биомах, где его обычно не бывает, если по сезону там сейчас идёт дождь.</p>
+        <p>Над хотбаром показывается, во сколько раз быстрее ломаются элитры и сколько прочности осталось. Сломать элитры полностью непогода не может: износ останавливается на последней единице.</p>
+      </section>
+      <section class="panel" id="p-seasons">
+        <h2>Сезоны и погода</h2>
+        <p class="tag">LinageSeasons · 1.3</p>
+        <p>Плагин вводит смену времён года по реальной дате. Часовой пояс сервера задан в настройках, по умолчанию это Москва. Погода идёт фазами: ясно, дождь, гроза. Длительность и частота фаз зависят от сезона: летом ясно подолгу, дожди редкие, но чаще с грозой; весной и осенью осадков больше; зимой они идут снегом.</p>
+        <p>Зимой снегопад виден в любом биоме, в остальные сезоны дождь виден и в биомах, где его обычно нет, например в саванне. Это картинка на стороне клиента, свойства самих биомов и механики мира она не меняет. Для неё нужен плагин PacketEvents.</p>
+        <p>Молнии по умолчанию визуальные: вспышка и гром без урона и огня. Для пропуска ночи нужно, чтобы спала половина игроков.</p>
+      </section>
+      <section class="panel" id="p-plants">
+        <h2>Рост растений</h2>
+        <p class="tag">LinagePlants · 1.2</p>
+        <p>Плагин ставит скорость роста растений в зависимость от условий: света неба, холода, тепла рядом, дождя и времени года. В тени, под крышей и под землёй растение растёт медленнее. Стекло свет пропускает, поэтому теплицы работают. Холодный открытый воздух замедляет рост, сильнее всего зимой; закрытое помещение и источник тепла рядом защищают от холода.</p>
+        <p>В ясный день и в тёплый дождь культуры иногда прирастают быстрее. У каждого растения есть своё предпочтительное время года, и оно влияет на рост. При посадке над хотбаром показывается, как идёт рост. Действие костной муки как ускорителя роста можно отключить, остальные её применения остаются.</p>
+        <p>Книга садовода изредка встречается в сундуках. У каждой книги свой автор и свой стиль текста. Пока она в инвентаре, при взятии семян в руку показывается, как растение ведёт себя в этом сезоне, а нажатие правой кнопкой по растению пустой рукой при приседании показывает его состояние.</p>
+      </section>
+    </div>
+  </div>
+
+  <footer>Версии плагинов указаны под названием каждого раздела.</footer>
+</main>
+</body>
+</html>
