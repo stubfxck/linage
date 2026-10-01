@@ -56,11 +56,12 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* ---------- космос: всё на CSS и SVG, без скриптов ---------- */
 .sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.clouds{position:absolute;inset:-10%;animation:drift 150s ease-in-out infinite alternate;will-change:transform}
-.clouds svg{width:100%;height:100%;display:block}
-.clouds.warm{opacity:.24}
-.clouds.violet{opacity:.2;animation-duration:190s;animation-direction:alternate-reverse}
-@keyframes drift{from{transform:translate3d(-3.5%,.8%,0) scale(1)}to{transform:translate3d(4.5%,-1.8%,0) scale(1.05)}}
+.clouds{position:absolute;top:-6%;bottom:-6%;left:0;width:200%;display:flex;filter:blur(6px);will-change:transform;
+  animation:slide 300s linear infinite}
+.clouds svg{flex:0 0 50%;width:50%;height:100%;display:block}
+.clouds.warm{opacity:.3}
+.clouds.violet{opacity:.24;animation-duration:420s}
+@keyframes slide{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
 .planet{
   position:absolute;left:-190px;bottom:-250px;width:560px;aspect-ratio:1;border-radius:50%;
   background:radial-gradient(circle at 72% 22%,#110c26 0%,#070512 46%,#020205 100%);
@@ -161,20 +162,18 @@ footer::before{content:"";width:28px;height:1px;background:var(--line)}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <!-- облака: фрактальный шум, окрашенный в пыльную дымку; рисуется браузером, без скриптов -->
   <filter id="cloudWarm" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="0.0034 0.0078" numOctaves="5" seed="4" result="n"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.0034 0.0078" numOctaves="5" seed="4" stitchTiles="stitch" result="n"/>
     <feColorMatrix in="n" type="matrix" values="0 0 0 0 .66  0 0 0 0 .58  0 0 0 0 .58  2.9 0 0 0 -1.25"/>
-    <feGaussianBlur stdDeviation="7"/>
   </filter>
   <filter id="cloudViolet" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="0.0026 0.0062" numOctaves="4" seed="19" result="n"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.0026 0.0062" numOctaves="4" seed="19" stitchTiles="stitch" result="n"/>
     <feColorMatrix in="n" type="matrix" values="0 0 0 0 .38  0 0 0 0 .27  0 0 0 0 .72  3.1 0 0 0 -1.4"/>
-    <feGaussianBlur stdDeviation="8"/>
   </filter>
 </svg>
 
 <div class="sky" aria-hidden="true">
-  <div class="clouds violet"><svg preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#cloudViolet)"/></svg></div>
-  <div class="clouds warm"><svg preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#cloudWarm)"/></svg></div>
+  <div class="clouds violet"><svg preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#cloudViolet)"/></svg><svg preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#cloudViolet)"/></svg></div>
+  <div class="clouds warm"><svg preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#cloudWarm)"/></svg><svg preserveAspectRatio="none"><rect width="100%" height="100%" filter="url(#cloudWarm)"/></svg></div>
   <div class="planet"></div>
   <div class="layer l1"></div><div class="layer l2"></div><div class="layer l3"></div><div class="layer l4"></div>
   <svg class="const" viewBox="0 0 320 200" fill="none" stroke="rgba(221,217,191,.35)" stroke-width="1">
